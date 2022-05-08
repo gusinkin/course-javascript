@@ -26,10 +26,9 @@ function forEach(array, fn) {
  */
 function map(array, fn) {
   const newArray = [];
-  // for (let i = 0; i < array.length; i++) {
-  //   newArray.push(fn(array[i], i, array));
-  // }
-  array.forEach((e) => newArray.push(fn(e, array.indexOf(e), array)));
+  for (let i = 0; i < array.length; i++) {
+    newArray.push(fn(array[i], i, array));
+  }
   return newArray;
 }
 
