@@ -17,23 +17,18 @@
    isAllTrue([100, 2, 3, 4, 5], n => n < 10) // вернет false
  */
 function isAllTrue(array, fn) {
-  if (!Array.isArray(array)) {
-    throw 'empty array';
-  }
-  if (!array.length) {
+  if (!(typeof array === 'object' && 'length' in array && array.length)) {
     throw 'empty array';
   }
   if (typeof fn !== 'function') {
     throw 'fn is not a function';
   }
-  let trigger = true;
   for (let i = 0; i < array.length; i++) {
     if (!fn(array[i], i, array)) {
-      trigger = false;
-      break;
+      return false;
     }
   }
-  return trigger;
+  return true;
 }
 
 /*
@@ -53,23 +48,18 @@ function isAllTrue(array, fn) {
    isSomeTrue([1, 2, 3, 4, 5], n => n > 20) // вернет false
  */
 function isSomeTrue(array, fn) {
-  if (!Array.isArray(array)) {
-    throw 'empty array';
-  }
-  if (!array.length) {
+  if (!(typeof array === 'object' && 'length' in array && array.length)) {
     throw 'empty array';
   }
   if (typeof fn !== 'function') {
     throw 'fn is not a function';
   }
-  let trigger = false;
   for (let i = 0; i < array.length; i++) {
     if (fn(array[i], i, array)) {
-      trigger = true;
-      break;
+      return true;
     }
   }
-  return trigger;
+  return false;
 }
 
 /*
