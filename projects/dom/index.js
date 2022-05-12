@@ -10,7 +10,11 @@
  Пример:
    createDivWithText('loftschool') // создаст элемент div, поместит в него 'loftschool' и вернет созданный элемент
  */
-function createDivWithText(text) {}
+function createDivWithText(text) {
+  const el = document.createElement('div');
+  el.textContent = text;
+  return el;
+}
 
 /*
  Задание 2:
@@ -20,7 +24,9 @@ function createDivWithText(text) {}
  Пример:
    prepend(document.querySelector('#one'), document.querySelector('#two')) // добавит элемент переданный первым аргументом в начало элемента переданного вторым аргументом
  */
-function prepend(what, where) {}
+function prepend(what, where) {
+  where.prepend(what);
+}
 
 /*
  Задание 3:
@@ -41,7 +47,26 @@ function prepend(what, where) {}
 
    findAllPSiblings(document.body) // функция должна вернуть массив с элементами div и span т.к. следующим соседом этих элементов является элемент с тегом P
  */
-function findAllPSiblings(where) {}
+function findAllPSiblings(where) {
+  /*
+  let result = [];
+  for (const element of where.children) {
+    if (element.nextElementSibling) {
+      if (element.nextElementSibling.nodeName === 'P') {
+        result.push(element);
+      }
+    }
+  }
+  return result;
+  */
+  const result = [];
+  for (let i = 0; i < where.children.length - 1; i++) {
+    if (where.children[i].nextElementSibling.nodeName === 'P') {
+      result.push(where.children[i]);
+    }
+  }
+  return result;
+}
 
 /*
  Задание 4:
@@ -63,7 +88,7 @@ function findAllPSiblings(where) {}
 function findError(where) {
   const result = [];
 
-  for (const child of where.childNodes) {
+  for (const child of where.children) {
     result.push(child.textContent);
   }
 
@@ -82,7 +107,13 @@ function findError(where) {
    После выполнения функции, дерево <div></div>привет<p></p>loftchool!!!
    должно быть преобразовано в <div></div><p></p>
  */
-function deleteTextNodes(where) {}
+function deleteTextNodes(where) {
+  for (const element of where.childNodes) {
+    if (element.nodeType === 3) {
+      element.textContent = '';
+    }
+  }
+}
 
 /*
  Задание 6:
@@ -95,7 +126,16 @@ function deleteTextNodes(where) {}
    После выполнения функции, дерево <span> <div> <b>привет</b> </div> <p>loftchool</p> !!!</span>
    должно быть преобразовано в <span><div><b></b></div><p></p></span>
  */
-function deleteTextNodesRecursive(where) {}
+function deleteTextNodesRecursive(where) {
+  for (const element of where.childNodes) {
+    if (element.nodeType === 3) {
+      element.textContent = '';
+    }
+    if (element.nodeType === 1) {
+      deleteTextNodesRecursive(element);
+    }
+  }
+}
 
 /*
  Задание 7 *:
@@ -117,7 +157,38 @@ function deleteTextNodesRecursive(where) {}
      texts: 3
    }
  */
-function collectDOMStat(root) {}
+function collectDOMStat(root) {
+  function recursive(x) {
+    for (const element of x.childNodes) {
+      if (element.nodeType === 3) {
+        obj.texts++;
+      } else if (element.nodeType === 1) {
+        if (element.classList.length) {
+          for (const item of element.classList) {
+            if (Object.keys(obj.classes).includes(item)) {
+              obj.classes[item] += 1;
+            } else {
+              obj.classes[item] = 1;
+            }
+          }
+        }
+        if (Object.keys(obj.tags).includes(element.nodeName)) {
+          obj.tags[element.nodeName] += 1;
+        } else {
+          obj.tags[element.nodeName] = 1;
+        }
+        recursive(element);
+      }
+    }
+  }
+  const obj = {
+    texts: 0,
+    classes: {},
+    tags: {},
+  };
+  recursive(root);
+  return obj;
+}
 
 /*
  Задание 8 *:
@@ -151,7 +222,46 @@ function collectDOMStat(root) {}
      nodes: [div]
    }
  */
-function observeChildNodes(where, fn) {}
+function observeChildNodes(where, fn) {
+  const callback = function (mutationsList, observer) {
+    for (const mutation of mutationsList) {
+      if (mutation.type === 'childList') {
+        if (mutation.addedNodes.length) {
+          const obj = {
+            type: 'insert',
+            nodes: [],
+          };
+          for (const addedItem of mutation.addedNodes) {
+            if (addedItem.nodeType === 1) {
+              obj.nodes.push(addedItem);
+            }
+          }
+          fn(obj);
+        } else if (mutation.removedNodes.length) {
+          const obj = {
+            type: 'remove',
+            nodes: [],
+          };
+          for (const removedItem of mutation.removedNodes) {
+            if (removedItem.nodeType === 1) {
+              obj.nodes.push(removedItem);
+            }
+          }
+          fn(obj);
+        }
+      }
+    }
+  };
+
+  const observer = new MutationObserver(callback);
+
+  const config = {
+    childList: true,
+    subtree: true,
+  };
+
+  observer.observe(where, config);
+}
 
 export {
   createDivWithText,
