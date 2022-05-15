@@ -48,17 +48,6 @@ function prepend(what, where) {
    findAllPSiblings(document.body) // функция должна вернуть массив с элементами div и span т.к. следующим соседом этих элементов является элемент с тегом P
  */
 function findAllPSiblings(where) {
-  /*
-  let result = [];
-  for (const element of where.children) {
-    if (element.nextElementSibling) {
-      if (element.nextElementSibling.nodeName === 'P') {
-        result.push(element);
-      }
-    }
-  }
-  return result;
-  */
   const result = [];
   for (let i = 0; i < where.children.length - 1; i++) {
     if (where.children[i].nextElementSibling.nodeName === 'P') {
