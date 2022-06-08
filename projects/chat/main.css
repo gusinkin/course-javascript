@@ -1,0 +1,47 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+.wrapper {
+  height: 100%;
+  /* overflow: hidden; */
+}
+
+.login-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+#loginForm {
+  display: flex;
+  flex-direction: column;
+}
+
+.input {
+  margin-bottom: 10px;
+}
+
+.chat-page {
+  display: flex;
+  height: 100%;
+}
+.sidepanel {
+  width: 20%;
+  background-color: aquamarine;
+}
+.hidden {
+  display: none;
+}
+.chat {
+  display: flex;
+  flex-direction: column;
+}
+.user {
+  display: flex;
+}
+.messages {
+  flex: 1;
+}
