@@ -27,21 +27,52 @@ body {
 .chat-page {
   display: flex;
   height: 100%;
+  width: 100%;
 }
 .sidepanel {
-  width: 20%;
-  background-color: aquamarine;
+  width: 30%;
+  background-color: rgba(255, 110, 53, 0.76);
+  color: #fff;
 }
 .hidden {
   display: none;
 }
 .chat {
+  flex: 1;
   display: flex;
   flex-direction: column;
 }
 .user {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 15px;
+}
+.usersListHeader {
+  padding-left: 30px;
+  text-transform: uppercase;
+}
+.usersList {
+  padding: 20px;
 }
 .messages {
   flex: 1;
+  padding: 20px;
+  overflow-y: scroll;
+}
+.message {
+  margin-bottom: 5px;
+}
+.system-message {
+  margin-bottom: 5px;
+  font-style: italic;
+}
+#messageForm {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin: 15px;
+}
+#message {
+  width: 80%;
 }

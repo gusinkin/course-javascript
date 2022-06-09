@@ -1,4 +1,5 @@
-import '/.client.html';
+import './client.html';
+import './main.css';
 
 const ws = new WebSocket('ws://localhost:5501');
 
@@ -83,21 +84,24 @@ ws.onmessage = function (message) {
       const messageText = response.payload.message;
       const authorName = response.payload.author.name;
       const message = document.createElement('div');
-      message.innerHTML = `<strong>${authorName}</strong> ${messageText}`;
+      message.classList.add('message');
+      message.innerHTML = `<strong>${authorName}:</strong> ${messageText}`;
 
       messages.append(message);
       break;
     case 'NEW_USER':
       const name = response.payload.name;
       const newUser = document.createElement('div');
+      newUser.classList.add('system-message');
       newUser.innerHTML = `${name} присоединился к чату`;
 
       messages.append(newUser);
       break;
     case 'USER_LEFT':
-      const name2 = response.payload.name;
+      const nameLeft = response.payload.name;
       const userLeft = document.createElement('div');
-      userLeft.innerHTML = `${name2} покинул чат`;
+      newUser.classList.add('system-message');
+      userLeft.innerHTML = `${nameLeft} покинул чат`;
 
       messages.append(userLeft);
       break;
