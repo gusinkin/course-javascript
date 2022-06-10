@@ -48,6 +48,13 @@ body {
   justify-content: space-between;
   margin: 15px;
 }
+.userAvatar {
+  background-image: url('./default.png');
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-size: cover;
+}
 .usersListHeader {
   padding-left: 30px;
   text-transform: uppercase;
@@ -62,6 +69,16 @@ body {
 }
 .message {
   margin-bottom: 5px;
+  display: flex;
+}
+.message__data {
+  margin-left: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.message__author {
+  font-weight: 700;
 }
 .system-message {
   margin-bottom: 5px;

@@ -13,6 +13,7 @@ const messageForm = document.getElementById('messageForm');
 const userName = document.querySelector('.userName');
 const usersList = document.querySelector('.usersList');
 const messages = document.querySelector('.messages');
+const userPhoto = document.querySelector('[data-role=user-photo]');
 
 let user;
 
@@ -53,6 +54,45 @@ logoutButton.addEventListener('click', function userLogout(e) {
   ws.send(JSON.stringify(request));
 });
 
+userPhoto.addEventListener('dragover', (e) => {
+  if (e.dataTransfer.items.length && e.dataTransfer.items[0].kind === 'file') {
+    e.preventDefault();
+  }
+});
+userPhoto.addEventListener('drop', (e) => {
+  const file = e.dataTransfer.items[0].getAsFile();
+  const reader = new FileReader();
+  reader.readAsDataURL(file);
+  reader.addEventListener('load', () => {
+    userPhoto.onUpload(reader.result);
+    // Загрузить на сервер
+    // console.log(reader.result);
+  });
+  userPhoto.style.backgroundImage = `url(${reader.result})`;
+  e.preventDefault();
+});
+
+userPhoto.onUpload = onUpload;
+function onUpload(data) {
+  console.log(user.name);
+  fetch('/chat/upload-photo', {
+    method: 'post',
+    body: JSON.stringify({
+      name: user.name,
+      image: data,
+    }),
+  });
+  user.avatar = data;
+  // const imageData = {
+  //   type: 'IMAGE_DATA',
+  //   payload: user,
+  // };
+  // ws.send(JSON.stringify(imageData));
+  // const image = new Image();
+  // image.src = data;
+  // userPhoto.appendChild(image);
+}
+
 ws.onmessage = function (message) {
   const response = JSON.parse(message.data);
   switch (response.type) {
@@ -85,7 +125,12 @@ ws.onmessage = function (message) {
       const authorName = response.payload.author.name;
       const message = document.createElement('div');
       message.classList.add('message');
-      message.innerHTML = `<strong>${authorName}:</strong> ${messageText}`;
+      // message.innerHTML = `<strong>${authorName}:</strong> ${messageText}`;
+      message.innerHTML = `<div class="userAvatar" data-role="user-avatar" data-user="${authorName}"></div>
+      <div class="message__data">
+        <div class="message__author">${authorName}</div>
+        <div class="message__text">${messageText}</div>
+      </div>`;
 
       messages.append(message);
       break;
@@ -93,17 +138,28 @@ ws.onmessage = function (message) {
       const name = response.payload.name;
       const newUser = document.createElement('div');
       newUser.classList.add('system-message');
-      newUser.innerHTML = `${name} присоединился к чату`;
+      newUser.innerHTML = `<b>${name}</b> присоединился к чату`;
 
       messages.append(newUser);
       break;
     case 'USER_LEFT':
       const nameLeft = response.payload.name;
       const userLeft = document.createElement('div');
-      newUser.classList.add('system-message');
-      userLeft.innerHTML = `${nameLeft} покинул чат`;
+      userLeft.classList.add('system-message');
+      userLeft.innerHTML = `<b>${nameLeft}</b> покинул чат`;
 
       messages.append(userLeft);
       break;
+    case 'photo-changed':
+      const data = response.data;
+      const avatars = document.querySelectorAll(
+        `[data-role=user-avatar][data-user=${data.name}]`
+      );
+
+      for (const avatar of avatars) {
+        avatar.style.backgroundImage = `url(/chat/photos/${
+          data.name
+        }.png?t=${Date.now()})`;
+      }
   }
 };
