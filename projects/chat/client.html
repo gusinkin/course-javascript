@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <!-- <link rel="stylesheet" href="main.css" /> -->
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="login-page">
+        <form id="loginForm">
+          <input type="text" id="name" class="input" placeholder="ваше имя" />
+          <button type="submit" id="loginButton">Войти</button>
+        </form>
+      </div>
+      <div class="chat-page hidden">
+        <div class="sidepanel">
+          <div class="user">
+            <div class="userAvatar" data-role="user-photo"></div>
+            <div class="userName"></div>
+            <button id="logoutButton">Выйти</button>
+          </div>
+          <div class="usersListHeader">Пользователи онлайн:</div>
+          <div class="usersList"></div>
+        </div>
+        <div class="chat">
+          <div class="messages"></div>
+          <form id="messageForm">
+            <input type="text" id="message" class="input" placeholder="сообщение" />
+            <button type="submit" id="sendButton">Отправить</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- <script src="client.js"></script> -->
+  </body>
+</html>
